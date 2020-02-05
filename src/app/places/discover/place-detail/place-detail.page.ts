@@ -34,7 +34,18 @@ export class PlaceDetailPage implements OnInit {
     // this.navCtrl.navigateBack('/places/tabs/discover');
     // this.navCtrl.pop();  === unreliable
     this.modalCtrl
-      .create({ component: CreateBookingComponent, componentProps: {selectedPlace: this.place} })
-      .then(modalEl => modalEl.present());
+      .create({
+        component: CreateBookingComponent,
+        componentProps: { selectedPlace: this.place }
+      })
+      .then(modalEl => {
+        modalEl.present();
+        return modalEl.onDidDismiss();
+      }).then(resultData => {
+        console.log(resultData.data, resultData.role);
+        if (resultData.role === 'confirm') {
+          console.log('BOOKED!');
+        }
+      });
   }
 }
