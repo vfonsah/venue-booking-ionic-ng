@@ -21,7 +21,9 @@
           </ion-card-header>
           <ion-img [src]='loadedPlaces[0].imgUrl'></ion-img>
           <ion-card-content>
-            {{loadedPlaces[0].description}}
+            <p>
+              <ion-text color=danger>{{loadedPlaces[0].description}}</ion-text>
+            </p>            
           </ion-card-content>
           <div>
             <ion-button fill='clear' color="primary" routerDirection="forward"
