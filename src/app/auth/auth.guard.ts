@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
@@ -8,12 +8,12 @@ import {
   Route,
   UrlSegment,
   Router
-} from "@angular/router";
-import { Observable } from "rxjs";
+} from '@angular/router';
+import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class AuthGuard implements CanLoad {
   constructor(private authSrvc: AuthService, private router: Router){}

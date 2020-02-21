@@ -5,17 +5,16 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.page.html',
-  styleUrls: ['./auth.page.scss'],
+  styleUrls: ['./auth.page.scss']
 })
 export class AuthPage implements OnInit {
+  constructor(private authSrvc: AuthService, private router: Router) {}
+  isLoading = false;
+  ngOnInit() {}
 
-  constructor(private authSrvc: AuthService, private router: Router) { }
-
-  ngOnInit() {
-  }
-
-  onLogIn(){
+  onLogIn() {
+    this.isLoading = true;
     this.authSrvc.logIn();
-    this.router.navigateByUrl('/places/tabs/discover')
+    setTimeout(() => {this.isLoading = false; this.router.navigateByUrl('/places/tabs/discover')}, 1500);
   }
 }
