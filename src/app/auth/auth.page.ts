@@ -11,12 +11,14 @@ import { AuthService } from './auth.service';
   styleUrls: ['./auth.page.scss']
 })
 export class AuthPage implements OnInit {
+  isLoading = false;
+  isLogin = true;
+
   constructor(
     private authSrvc: AuthService,
     private router: Router,
     private loadingCtrl: LoadingController
   ) {}
-  isLoading = false;
   ngOnInit() {}
 
   onLogIn() {
@@ -36,5 +38,9 @@ export class AuthPage implements OnInit {
 
   onSubmit(form: NgForm) {
     console.log(form);
+  }
+
+  onSwitchAuthMode() {
+    this.isLogin = !this.isLogin;
   }
 }
