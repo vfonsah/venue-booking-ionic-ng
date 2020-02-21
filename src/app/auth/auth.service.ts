@@ -11,11 +11,11 @@ export class AuthService {
     return this._userIsAuthenticated;
   }
 
-  logIn(){
+  logIn() {
     this._userIsAuthenticated = true;
   }
 
-  logOut(){
+  logOut() {
     this._userIsAuthenticated = false;
   }
   constructor() { }
