@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { take, map, tap } from 'rxjs/operators';
+import { take, map, tap, delay } from 'rxjs/operators';
 
 import { Place } from './place.model';
 import { AuthService } from '../auth/auth.service';
@@ -76,10 +76,9 @@ export class PlacesService {
     );
     this.places.pipe(
       take(1),
+      delay(1000),
       tap(places => {
-        setTimeout(() => {
           this._places.next(places.concat(newPlace));
-        }, 1000);
       })
     );
   }
