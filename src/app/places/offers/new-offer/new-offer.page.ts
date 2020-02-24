@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { PlacesService } from '../../places.service';
 
-
 @Component({
   selector: 'app-new-offer',
   templateUrl: './new-offer.page.html',
@@ -63,8 +62,7 @@ export class NewOfferPage implements OnInit {
             +this.form.value.price,
             new Date(this.form.value.dateFrom),
             new Date(this.form.value.dateTo)
-          )
-          .subscribe(() => {
+          ).subscribe(() => {
             loadingEl.dismiss();
             this.form.reset();
             this.router.navigate(['/places/tabs/offers']);

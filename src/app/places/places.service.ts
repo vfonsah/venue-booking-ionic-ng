@@ -74,11 +74,11 @@ export class PlacesService {
       dateTo,
       this.authSvc.userId
     );
-    this.places.pipe(
+    return this.places.pipe(
       take(1),
       delay(1000),
       tap(places => {
-          this._places.next(places.concat(newPlace));
+        this._places.next(places.concat(newPlace));
       })
     );
   }
