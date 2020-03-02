@@ -94,7 +94,7 @@ export class PlacesService {
       Math.random().toString(),
       title,
       description,
-      'https://upload.wikimedia.org/wikipedia/commons/0/01/San_Francisco_with_two_bridges_and_the_fog.jpg',
+      'https://lonelyplanetimages.imgix.net/mastheads/GettyImages-538096543_medium.jpg?sharp=10&vib=20&w=1200',
       price,
       dateFrom,
       dateTo,
