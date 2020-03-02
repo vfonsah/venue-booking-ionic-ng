@@ -114,13 +114,15 @@ export class PlacesService {
   }
 
   updatePlace(placeId: string, title: string, description: string) {
+
+    let updatedPlaces: Place[];
     return this.places.pipe(
       take(1),
-      delay(1000),
-      tap(places => {
+      switchMap(places => {
         const updatePlaceIndex = places.findIndex(pl => pl.id === placeId);
-        const updatedPlaces = [...places];
+        updatedPlaces = [...places];
         const oldPlace = updatedPlaces[updatePlaceIndex];
+
         updatedPlaces[updatePlaceIndex] = new Place(
           oldPlace.id,
           title,
@@ -131,6 +133,12 @@ export class PlacesService {
           oldPlace.availableTo,
           oldPlace.userId
         );
+        return this.http.put(
+          `https://ionic-venue-booking-ng.firebaseio.com/offered-places/${placeId}.json`,
+          { ...updatedPlaces[updatePlaceIndex], id: null }
+        );
+      }),
+      tap(() => {
         this._places.next(updatedPlaces);
       })
     );
