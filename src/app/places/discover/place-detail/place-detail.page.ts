@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   NavController,
   ModalController,
   ActionSheetController,
-  LoadingController
+  LoadingController,
+  AlertController
 } from '@ionic/angular';
 
 import { Subscription } from 'rxjs';
@@ -24,34 +25,58 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
   place: Place;
   private placeSub: Subscription;
   isBookable = false;
+  isLoading = false;
+
   constructor(
-    private router: ActivatedRoute,
+    private route: ActivatedRoute,
+    private router: Router,
     private navCtrl: NavController,
     private modalCtrl: ModalController,
     private placesService: PlacesService,
     private actionSheetCtrl: ActionSheetController,
     private bookingService: BookingService,
     private loadingCtrl: LoadingController,
-    private authService: AuthService
+    private authService: AuthService,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {
-    this.router.paramMap.subscribe(paramMap => {
+    this.route.paramMap.subscribe(paramMap => {
       if (!paramMap.has('placeId')) {
         this.navCtrl.navigateBack('/places/tabs/discover');
         return;
       }
+      this.isLoading = true;
       this.placeSub = this.placesService
         .getPlace(paramMap.get('placeId'))
-        .subscribe(place => {
-          this.place = place;
-          this.isBookable = place.userId !== this.authService.userId;
-        });
+        .subscribe(
+          place => {
+            this.place = place;
+            this.isBookable = place.userId !== this.authService.userId;
+            this.isLoading = false;
+          },
+          error => {
+            this.alertCtrl
+              .create({
+                header: 'An error occured!',
+                message: 'Failed to load place',
+                buttons: [
+                  {
+                    text: 'Okay',
+                    handler: () => {
+                      this.router.navigate(['/places/tabs/discover']);
+                    }
+                  }
+                ]
+              })
+              .then(alertEl => alertEl.present());
+          }
+        );
     });
   }
 
   onBookPlace() {
-    // this.router.navigateByUrl('/places/tabs/discover');
+    // this.route.navigateByUrl('/places/tabs/discover');
     // this.navCtrl.navigateBack('/places/tabs/discover');
     // this.navCtrl.pop();  === unreliable
     this.actionSheetCtrl
