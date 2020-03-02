@@ -1,6 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavController, LoadingController } from '@ionic/angular';
+import {
+  NavController,
+  LoadingController,
+  AlertController
+} from '@ionic/angular';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
@@ -26,7 +30,8 @@ export class EditOfferPage implements OnInit, OnDestroy {
     private placesService: PlacesService,
     private navCtrl: NavController,
     private router: Router,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {
@@ -39,20 +44,41 @@ export class EditOfferPage implements OnInit, OnDestroy {
       this.isLoading = true;
       this.placeSub = this.placesService
         .getPlace(parMap.get('placeId'))
-        .subscribe(place => {
-          this.place = place;
-          this.form = new FormGroup({
-            title: new FormControl(this.place.title, {
-              updateOn: 'blur',
-              validators: [Validators.required]
-            }),
-            description: new FormControl(this.place.description, {
-              updateOn: 'blur',
-              validators: [Validators.required, Validators.maxLength(180)]
-            })
-          });
-          this.isLoading = false;
-        });
+        .subscribe(
+          place => {
+            this.place = place;
+            this.form = new FormGroup({
+              title: new FormControl(this.place.title, {
+                updateOn: 'blur',
+                validators: [Validators.required]
+              }),
+              description: new FormControl(this.place.description, {
+                updateOn: 'blur',
+                validators: [Validators.required, Validators.maxLength(180)]
+              })
+            });
+            this.isLoading = false;
+          },
+          error => {
+            this.alertCtrl
+              .create({
+                header: 'We encountered an error!',
+                message:
+                  'The requested offer could not be fetched.<br/> Please try again later',
+                buttons: [
+                  {
+                    text: 'OK',
+                    handler: () => {
+                      this.router.navigate(['/places/tabs/offers']);
+                    }
+                  }
+                ]
+              })
+              .then(alertEl => {
+                alertEl.present();
+              });
+          }
+        );
     });
   }
 
